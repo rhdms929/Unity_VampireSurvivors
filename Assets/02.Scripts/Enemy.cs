@@ -15,7 +15,7 @@ public class Enemy : MonoBehaviour
 	void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-		spriter = GetComponent<SpriteRenderer>();
+		spriter = GetComponentInChildren<SpriteRenderer>();
 	}
     void FixedUpdate()
 	{
@@ -27,6 +27,10 @@ public class Enemy : MonoBehaviour
 
 	private void LateUpdate()
 	{
-		spriter.flipX = target.position.x < rb.position.x;
+		if (target == null) return;
+		// 플레이어가 몬스터보다 왼쪽에 있는지 판정
+		bool isLeft = target.position.x < rb.position.x;
+
+		transform.localScale = new Vector3(isLeft ? 1f : -1f, 1f, 1f);
 	}
 }

@@ -29,7 +29,7 @@ public class Player : MonoBehaviour
 		//	¹æÇâ
 		if (moveX != 0)
 		{
-			transform.localScale = new Vector3(-moveX, 1, 1);
+			anim.transform.localScale = new Vector3(moveX > 0 ? -1 : 1, 1, 1);
 		}
 	}
 

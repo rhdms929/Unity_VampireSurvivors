@@ -10,7 +10,7 @@ public class Enemy : MonoBehaviour
 	public RuntimeAnimatorController[] animator;
 	public Rigidbody2D target;
 
-	bool isLive = true;
+	bool isLive;
 
 	Rigidbody2D rb;
 	Animator anim;
@@ -53,5 +53,29 @@ public class Enemy : MonoBehaviour
 		speed = data.speed;
 		maxHealth = data.health;
 		health = data.health;
+	}
+
+	void OnTriggerEnter2D(Collider2D collision)
+	{
+		if(!collision.CompareTag("Weapon"))
+			return;
+
+		health -= collision.GetComponent<Weapon>().damage;
+
+		if(health > 0)
+		// Live Hit Animation
+		{
+
+		}
+		else
+		{
+			// Die Animation
+			Dead();
+		}
+	}
+
+	void Dead()
+	{
+		gameObject.SetActive(false);
 	}
 }

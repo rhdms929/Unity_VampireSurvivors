@@ -153,6 +153,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameTime: 0
   maxGameTime: 20
+  level: 0
+  kill: 0
+  exp: 0
+  nextExp: 03000000050000000a0000006400000096000000d20000001801000068010000c201000026020000
   pool: {fileID: 1637999729}
   player: {fileID: 336960475238414674}
 --- !u!4 &64735723
@@ -4791,7 +4795,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 7.861111
+  orthographic size: 9.481482
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -5194,7 +5198,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &803693024
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5226,7 +5230,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43af0eeb485f66e4f9940d81073eb19c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 1
+  type: 1
   prefabId: 3
   damage: 3
   count: 1
@@ -18576,7 +18580,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2010559732
 RectTransform:
   m_ObjectHideFlags: 0
@@ -18608,7 +18612,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43af0eeb485f66e4f9940d81073eb19c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 0
+  type: 0
   prefabId: 2
   damage: 11
   count: 2
@@ -25047,10 +25051,10 @@ GameObject:
   m_Component:
   - component: {fileID: 390841537534613031}
   - component: {fileID: 1855887520896822382}
+  - component: {fileID: 2847210145545360341}
   - component: {fileID: 4714971973842491431}
   - component: {fileID: 4810788472766240142}
   - component: {fileID: 336960475238414674}
-  - component: {fileID: 2847210145545360341}
   - component: {fileID: 5833421876399907881}
   m_Layer: 0
   m_Name: Player

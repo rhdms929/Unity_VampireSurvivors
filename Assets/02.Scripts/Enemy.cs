@@ -13,17 +13,24 @@ public class Enemy : MonoBehaviour
 	bool isLive;
 
 	Rigidbody2D rb;
+	Collider2D col;
 	Animator anim;
 	SpriteRenderer spriter;
+	WaitForFixedUpdate wait;
 
 	void Awake()
 	{
 		rb = GetComponent<Rigidbody2D>();
+		col = GetComponent<Collider2D>();
 		anim = GetComponentInChildren<Animator>();
 		spriter = GetComponent<SpriteRenderer>();
+		wait = new WaitForFixedUpdate();
 	}
 	void FixedUpdate()
 	{
+		if(!isLive || anim.GetCurrentAnimatorStateInfo(0).IsName("DAMAGED"))
+			return;
+
 		Vector2 dirVec = target.position - rb.position;
 		Vector2 nextVec = dirVec.normalized * speed * Time.fixedDeltaTime;
 		rb.MovePosition(rb.position + nextVec);
@@ -44,7 +51,20 @@ public class Enemy : MonoBehaviour
 	{
 		target = GameManager.instance.player.GetComponent<Rigidbody2D>();
 		isLive = true;
+		col.enabled = true;
+		rb.simulated = true;
+		spriter.sortingOrder = 2; 
+		anim.SetBool("Dead", false);
 		health = maxHealth;
+
+		// 다시 소환될 때 투명도 초기화
+		SpriteRenderer[] childrenSprites = GetComponentsInChildren<SpriteRenderer>();
+		foreach (SpriteRenderer s in childrenSprites)
+		{
+			Color c = s.color;
+			c.a = 1f;
+			s.color = c;
+		}
 	}
 
 	public void Init(SpawnData data)
@@ -57,21 +77,63 @@ public class Enemy : MonoBehaviour
 
 	void OnTriggerEnter2D(Collider2D collision)
 	{
-		if(!collision.CompareTag("Weapon"))
+		if(!collision.CompareTag("Weapon") || !isLive)
 			return;
 
 		health -= collision.GetComponent<Weapon>().damage;
+		StartCoroutine(KnockBack());
 
-		if(health > 0)
+		if (health > 0)
 		// Live Hit Animation
 		{
-
+			anim.SetTrigger("Damaged");
 		}
 		else
 		{
 			// Die Animation
-			Dead();
+			isLive = false;
+			col.enabled = false;
+			rb.simulated = false;
+			spriter.sortingOrder = 1;  // 살아있는 몬스터들을 가리지않게 하기위함
+			anim.SetBool("Dead", true);
+			StartCoroutine(FadeOut());
+			GameManager.instance.kill++;
+			GameManager.instance.AddExp();
 		}
+	}
+
+	IEnumerator FadeOut()
+	{
+		yield return new WaitForSeconds(1.0f); // 죽는 애니메이션 볼 시간 확보
+
+		// 1. 모든 자식 오브젝트의 SpriteRenderer를 배열로 가져옵니다.
+		SpriteRenderer[] childrenSprites = GetComponentsInChildren<SpriteRenderer>();
+
+		float alpha = 1f;
+		while (alpha > 0)
+		{
+			alpha -= Time.deltaTime;
+
+			// 2. 반복문을 돌며 모든 스프라이트의 알파값을 수정합니다.
+			foreach (SpriteRenderer s in childrenSprites)
+			{
+				// 기존 색상은 유지하고 알파값만 적용
+				Color c = s.color;
+				c.a = alpha;
+				s.color = c;
+			}
+			yield return null;
+		}
+
+		Dead(); // 완전히 투명해지면 비활성화
+	}
+
+	IEnumerator KnockBack()
+	{
+		yield return wait;  // 다음 하나의 물리 프레임 딜레이
+		Vector3 playerPos = GameManager.instance.player.transform.position;
+		Vector3 dirVec = transform.position - playerPos;
+		rb.AddForce(dirVec.normalized * 0.5f, ForceMode2D.Impulse);
 	}
 
 	void Dead()

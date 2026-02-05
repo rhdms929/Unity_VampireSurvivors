@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class WeaponManager : MonoBehaviour
 {
-	public int id;
+	public enum WeaponType { Orbit, Fire }
+	public WeaponType type;
+
 	public int prefabId;
 	public float damage;
 	public int count;
 	public float speed;
 
-	float timer;
-	Player player;
+	public Player player { get; private set; }
+	private IWeaponAbility _ability;
 
 	void Awake()
 	{
@@ -20,27 +22,28 @@ public class WeaponManager : MonoBehaviour
 
 	void Start()
 	{
-		Init();
+		// 무기 타입에 따라 전략 주입
+		SetStrategy();
+	}
+
+	void SetStrategy()
+	{
+		switch (type)
+		{
+			case WeaponType.Orbit:
+				_ability = new Orbit();
+				break;
+			case WeaponType.Fire:
+				_ability = new FireAbility();
+				break;
+		}
+		_ability.Initialize(this);
 	}
 
 	void Update()
 	{
-		switch (id)
-		{
-			case 0:
-				transform.Rotate(Vector3.back * speed * Time.deltaTime);
-				break;
-			default:
-				timer += Time.deltaTime;
-				if (timer > speed)
-				{
-					timer = 0f;
-					Fire();
-				}
-				break;
-		}
+		_ability?.Execute();
 
-		//Test
 		if (Input.GetKeyDown(KeyCode.Space))
 		{
 			LevelUp(10, 1);
@@ -51,65 +54,6 @@ public class WeaponManager : MonoBehaviour
 	{
 		this.damage = damage;
 		this.count += count;
-
-		if(id == 0)
-			Batch();
+		_ability.OnLevelUp();
 	}
-
-
-	public void Init()
-	{
-		switch(id)
-		{
-			case 0:
-				speed = 150;
-				Batch();
-				break;
-			default:
-				speed = 0.3f;
-				break;
-		}
-	}
-
-	void Batch()
-	{
-		for(int i = 0; i < count; i++)
-		{
-			Transform weapon;
-
-			if ( i < transform.childCount)
-			{
-				weapon = transform.GetChild(i);
-			}
-			else
-			{
-				weapon = GameManager.instance.pool.Get(prefabId).transform;
-				weapon.parent = transform;
-			}
-			
-
-			weapon.localPosition = Vector3.zero;
-			weapon.localRotation = Quaternion.identity;
-
-			Vector3 rotVec = Vector3.forward * 360 * i / count;
-			weapon.Rotate(rotVec);
-			weapon.Translate(weapon.up * 1.5f, Space.World);
-			weapon.GetComponent<Weapon>().Init(damage, -1, Vector3.zero); //	-1은 무한으로 공격하는 근접공격
-		}
-	}
-
-	void Fire()
-	{
-		if (!player.scanner.nearestTarget)
-			return;
-
-		Vector3 targetPos = player.scanner.nearestTarget.position;
-		Vector3 dir = (targetPos - transform.position).normalized;
-
-		Transform bullet = GameManager.instance.pool.Get(prefabId).transform;
-		bullet.position = transform.position;
-		bullet.rotation = Quaternion.FromToRotation(Vector3.up, dir);
-		bullet.GetComponent<Weapon>().Init(damage, count, dir);
-	}
-
 }

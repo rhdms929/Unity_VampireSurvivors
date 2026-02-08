@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
 	public float gameTime;
 	public float maxGameTime = 2 * 10f; //20√ 
 	[Header("# Player Stats")]
+	public int health;
+	public int maxHealth = 100;
 	public int level;
 	public int kill;
 	public int exp;
@@ -28,6 +30,12 @@ public class GameManager : MonoBehaviour
 			Destroy(gameObject);
 		}
 	}
+
+	void Start()
+	{
+		health = maxHealth;
+	}
+
 	void Update()
 	{
 		gameTime += Time.deltaTime;

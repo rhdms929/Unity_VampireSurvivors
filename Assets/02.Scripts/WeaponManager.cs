@@ -7,6 +7,7 @@ public class WeaponManager : MonoBehaviour
 	public enum WeaponType { Orbit, Fire }
 	public WeaponType type;
 
+	public int id;
 	public int prefabId;
 	public float damage;
 	public int count;
@@ -17,26 +18,35 @@ public class WeaponManager : MonoBehaviour
 
 	void Awake()
 	{
-		player = GetComponentInParent<Player>();
+		player = GameManager.instance.player;
 	}
 
-	void Start()
+	public void SetStrategy(ItemData data)
 	{
-		// 무기 타입에 따라 전략 주입
-		SetStrategy();
-	}
+		if (player == null) player = GetComponentInParent<Player>();
 
-	void SetStrategy()
-	{
+		id = data.itemID;
+		damage = data.baseDamage;
+		count = data.baseCount;
+
+		for (int i = 0; i < GameManager.instance.pool.prefabs.Length; i++)
+		{
+			if (data.projectile == GameManager.instance.pool.prefabs[i])
+			{
+				prefabId = i;
+				break;
+			}
+		}
+
+		if (data.itemType == ItemData.ItemType.Melee) type = WeaponType.Orbit;
+		else if (data.itemType == ItemData.ItemType.Ranged) type = WeaponType.Fire;
+
 		switch (type)
 		{
-			case WeaponType.Orbit:
-				_ability = new Orbit();
-				break;
-			case WeaponType.Fire:
-				_ability = new FireAbility();
-				break;
+			case WeaponType.Orbit: _ability = new Orbit(); break;
+			case WeaponType.Fire: _ability = new FireAbility(); break;
 		}
+
 		_ability.Initialize(this);
 	}
 
@@ -55,5 +65,7 @@ public class WeaponManager : MonoBehaviour
 		this.damage = damage;
 		this.count += count;
 		_ability.OnLevelUp();
+
+		player.BroadcastMessage("ApplyGear", SendMessageOptions.DontRequireReceiver);
 	}
 }

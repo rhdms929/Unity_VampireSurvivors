@@ -52,6 +52,9 @@ public class WeaponManager : MonoBehaviour
 
 	void Update()
 	{
+		if (!GameManager.instance.isLive)
+			return;
+
 		_ability?.Execute();
 
 		if (Input.GetKeyDown(KeyCode.Space))

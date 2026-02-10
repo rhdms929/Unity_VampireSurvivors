@@ -20,6 +20,9 @@ public class Player : MonoBehaviour
 
 	void Update()
 	{
+		if(!GameManager.instance.isLive)
+			return;
+
 		float moveX = Input.GetAxisRaw("Horizontal");
 		float moveY = Input.GetAxisRaw("Vertical");
 		inputVec = new Vector2(moveX, moveY).normalized;
@@ -38,6 +41,8 @@ public class Player : MonoBehaviour
 
 	void FixedUpdate()
 	{
+		if (!GameManager.instance.isLive)
+			return;
 		rb.MovePosition(rb.position + inputVec * moveSpeed * Time.fixedDeltaTime);
 	}
 }

@@ -12,6 +12,8 @@ public class ItemUpgrade : MonoBehaviour
 
 	Image icon;
 	Text textLevel;
+	Text textName;
+	Text textDesc;
 
 	void Awake()
 	{
@@ -20,11 +22,25 @@ public class ItemUpgrade : MonoBehaviour
 
 		Text[] texts = GetComponentsInChildren<Text>();
 		textLevel = texts[0];
+		textName = texts[1];
+		textDesc = texts[2];
+		textName.text = data.itemName;
 	}
 
-	void LateUpdate()
+	void OnEnable()
 	{
-		textLevel.text = "Lv. " + (level + 1);  //	level 1부터 시작
+		textLevel.text = "Lv. " + (level + 1);
+
+		if (data.itemType == ItemData.ItemType.Melee || data.itemType == ItemData.ItemType.Ranged)
+		{
+			// 인자 2개 (데미지, 개수)
+			textDesc.text = string.Format(data.itemDesc, data.growthDamage[level] * 100, data.growthCount[level]);
+		}
+		else
+		{
+			// 인자 1개 (상승률만)
+			textDesc.text = string.Format(data.itemDesc, data.growthDamage[level] * 100);
+		}
 	}
 
 	public void OnClick()

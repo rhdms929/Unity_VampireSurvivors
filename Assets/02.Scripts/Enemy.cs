@@ -28,7 +28,10 @@ public class Enemy : MonoBehaviour
 	}
 	void FixedUpdate()
 	{
-		if(!isLive || anim.GetCurrentAnimatorStateInfo(0).IsName("DAMAGED"))
+		if (!GameManager.instance.isLive)
+			return;
+
+		if (!isLive || anim.GetCurrentAnimatorStateInfo(0).IsName("DAMAGED"))
 			return;
 
 		Vector2 dirVec = target.position - rb.position;
@@ -39,6 +42,9 @@ public class Enemy : MonoBehaviour
 
 	void LateUpdate()
 	{
+		if (!GameManager.instance.isLive)
+			return;
+
 		if (target == null)
 			return;
 		// 플레이어가 몬스터보다 왼쪽에 있는지 판정

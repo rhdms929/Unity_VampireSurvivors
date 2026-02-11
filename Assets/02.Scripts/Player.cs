@@ -7,6 +7,7 @@ public class Player : MonoBehaviour
 	public Vector2 inputVec; 
 	public float moveSpeed = 5f;
 	public Scanner scanner;
+	public bool isDead;
 
 	Rigidbody2D rb;
 	Animator anim;
@@ -48,19 +49,27 @@ public class Player : MonoBehaviour
 
 	void OnCollisionStay2D(Collision2D collision)
 	{
-		if(!GameManager.instance.isLive)
+		if (!GameManager.instance.isLive || isDead) 
 			return;
 
 		GameManager.instance.health -= Time.deltaTime * 10;
 
-		if(GameManager.instance.health < 0)
-			{
-				for(int i=2; i < transform.childCount; i++)
-				{
-					transform.GetChild(i).gameObject.SetActive(false);
-				}
-			anim.SetTrigger("Dead");
+		if (GameManager.instance.health < 0)
+		{
+			Die(); 
 		}
-		
+	}
+
+	void Die()
+	{
+		isDead = true; 
+
+		for (int i = 2; i < transform.childCount; i++)
+		{
+			transform.GetChild(i).gameObject.SetActive(false);
+		}
+
+		anim.SetTrigger("4_Death");
+		GameManager.instance.GameOver();
 	}
 }

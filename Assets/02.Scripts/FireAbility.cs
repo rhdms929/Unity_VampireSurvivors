@@ -21,7 +21,10 @@ public class FireAbility : IWeaponAbility
 		}
 	}
 
-	public void OnLevelUp() { /* 발사형은 레벨업 시 특별한 즉시 실행 로직 없음 */ }
+	public void OnLevelUp() 
+	{  
+	
+	}
 
 	private void Fire()
 	{

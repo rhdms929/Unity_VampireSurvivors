@@ -946,8 +946,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 3b47e0d29243210479936116729592d7, type: 2}
   level: 0
-  weapon: {fileID: 0}
-  gear: {fileID: 0}
+  icon: {fileID: 269214322}
+  textLevel: {fileID: 1546273718}
+  textName: {fileID: 83007651}
+  textDesc: {fileID: 102964337}
 --- !u!114 &240469117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1265,8 +1267,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: ae19d21de8a20b148abe20238f030666, type: 2}
   level: 0
-  weapon: {fileID: 0}
-  gear: {fileID: 0}
+  icon: {fileID: 1933605985}
+  textLevel: {fileID: 136459010}
+  textName: {fileID: 105023892}
+  textDesc: {fileID: 990592823}
 --- !u!114 &290461592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12738,8 +12742,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: f0e27b3054be7ac4999152c5f2f8257c, type: 2}
   level: 0
-  weapon: {fileID: 0}
-  gear: {fileID: 0}
+  icon: {fileID: 868399917}
+  textLevel: {fileID: 1043459498}
+  textName: {fileID: 443521920}
+  textDesc: {fileID: 63705654}
 --- !u!114 &1491313132
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21807,8 +21813,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: eb478708e3eaa614ab9843bcfe9c979d, type: 2}
   level: 0
-  weapon: {fileID: 0}
-  gear: {fileID: 0}
+  icon: {fileID: 182082386}
+  textLevel: {fileID: 1865265103}
+  textName: {fileID: 1140120809}
+  textDesc: {fileID: 775482312}
 --- !u!114 &1674962713
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22399,8 +22407,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: b3c8473a6d3df7341ab195cd53fd19df, type: 2}
   level: 0
-  weapon: {fileID: 0}
-  gear: {fileID: 0}
+  icon: {fileID: 2068755488}
+  textLevel: {fileID: 1595690261}
+  textName: {fileID: 273360138}
+  textDesc: {fileID: 519238275}
 --- !u!114 &1923168015
 MonoBehaviour:
   m_ObjectHideFlags: 0

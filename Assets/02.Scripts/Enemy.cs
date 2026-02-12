@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+	[Header("# Enemy Stats")]
 	public float speed;
 	public float health;
 	public float maxHealth;
@@ -28,29 +29,29 @@ public class Enemy : MonoBehaviour
 	}
 	void FixedUpdate()
 	{
-		if (!GameManager.instance.isLive)
+		// 게임이 멈췄거나 적이 죽었다면 중단
+		if (!GameManager.instance.isLive || !isLive)
 			return;
 
-		if (!isLive || anim.GetCurrentAnimatorStateInfo(0).IsName("DAMAGED"))
+		if (anim.GetCurrentAnimatorStateInfo(0).IsName("DAMAGED"))
 			return;
 
 		Vector2 dirVec = target.position - rb.position;
 		Vector2 nextVec = dirVec.normalized * speed * Time.fixedDeltaTime;
+
 		rb.MovePosition(rb.position + nextVec);
 		rb.velocity = Vector2.zero;
 	}
 
 	void LateUpdate()
 	{
-		if (!GameManager.instance.isLive)
+		if (!GameManager.instance.isLive || target == null) 
 			return;
 
-		if (target == null)
-			return;
-		// 플레이어가 몬스터보다 왼쪽에 있는지 판정
+		// 플레이어가 나보다 왼쪽에 있는지 판정
 		bool isLeft = target.position.x < rb.position.x;
 
-		transform.localScale = new Vector3(isLeft ? 1f : -1f, 1f, 1f);
+		spriter.flipX = isLeft;
 	}
 
 	void OnEnable()
@@ -81,16 +82,17 @@ public class Enemy : MonoBehaviour
 		health = data.health;
 	}
 
+	//	죽음 처리
 	void OnTriggerEnter2D(Collider2D collision)
 	{
 		if(!collision.CompareTag("Weapon") || !isLive)
 			return;
 
 		health -= collision.GetComponent<Weapon>().damage;
+
 		StartCoroutine(KnockBack());
 
 		if (health > 0)
-		// Live Hit Animation
 		{
 			anim.SetTrigger("Damaged");
 		}
@@ -98,10 +100,11 @@ public class Enemy : MonoBehaviour
 		{
 			// Die Animation
 			isLive = false;
-			col.enabled = false;
+			col.enabled = false;    // 시체와는 더 이상 부딪히지 않게
 			rb.simulated = false;
 			spriter.sortingOrder = 1;  // 살아있는 몬스터들을 가리지않게 하기위함
 			anim.SetBool("Dead", true);
+
 			StartCoroutine(FadeOut());
 			GameManager.instance.kill++;
 			GameManager.instance.AddExp();
@@ -112,18 +115,14 @@ public class Enemy : MonoBehaviour
 	{
 		yield return new WaitForSeconds(1.0f); // 죽는 애니메이션 볼 시간 확보
 
-		// 1. 모든 자식 오브젝트의 SpriteRenderer를 배열로 가져옵니다.
 		SpriteRenderer[] childrenSprites = GetComponentsInChildren<SpriteRenderer>();
-
 		float alpha = 1f;
+
 		while (alpha > 0)
 		{
 			alpha -= Time.deltaTime;
-
-			// 2. 반복문을 돌며 모든 스프라이트의 알파값을 수정합니다.
 			foreach (SpriteRenderer s in childrenSprites)
 			{
-				// 기존 색상은 유지하고 알파값만 적용
 				Color c = s.color;
 				c.a = alpha;
 				s.color = c;
@@ -136,9 +135,10 @@ public class Enemy : MonoBehaviour
 
 	IEnumerator KnockBack()
 	{
-		yield return wait;  // 다음 하나의 물리 프레임 딜레이
+		yield return wait;  // 물리 프레임 딜레이
 		Vector3 playerPos = GameManager.instance.player.transform.position;
 		Vector3 dirVec = transform.position - playerPos;
+
 		rb.AddForce(dirVec.normalized * 0.5f, ForceMode2D.Impulse);
 	}
 

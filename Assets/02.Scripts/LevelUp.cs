@@ -32,30 +32,36 @@ public class LevelUp : MonoBehaviour
 		items[index].OnClick();
 	}
 
-	void Next() // 랜덤 활성화 함수 작성
+	void Next()
 	{
-		//	모든 아이템 비활성화
 		foreach (ItemUpgrade item in items)
 		{
 			item.gameObject.SetActive(false);
 		}
-		//	3개 랜덤 활성화
-		int[] rand = new int[3];
-		while (true)
-		{
-			rand[0] = Random.Range(0, items.Length);
-			rand[1] = Random.Range(0, items.Length);
-			rand[2] = Random.Range(0, items.Length);
 
-			if (rand[0] != rand[1] && rand[1] != rand[2] && rand[0] != rand[2])
-				break;
+		List<int> ranList = new List<int>();
+		for (int i = 0; i < items.Length; i++)
+		{
+			ranList.Add(i);
 		}
 
-		for (int i = 0; i < rand.Length; i++)
+		// 리스트 셔플 
+		for (int i = 0; i < ranList.Count; i++)
 		{
-			ItemUpgrade randItem = items[rand[i]];
-			//	만렙 아이템의 경우는 소비 아이템으로 대체
-			if(randItem.level == randItem.data.growthDamage.Length)
+			int rand = Random.Range(i, ranList.Count);
+			int temp = ranList[i];
+			ranList[i] = ranList[rand];
+			ranList[rand] = temp;
+		}
+
+		for (int i = 0; i < 3; i++)
+		{
+			if (i >= ranList.Count) break;
+
+			ItemUpgrade randItem = items[ranList[i]];
+
+			// 만렙 아이템의 경우 소비 아이템(예: 체력 회복)으로 대체
+			if (randItem.level >= randItem.data.growthDamage.Length)
 			{
 				items[4].gameObject.SetActive(true);
 			}
@@ -64,6 +70,5 @@ public class LevelUp : MonoBehaviour
 				randItem.gameObject.SetActive(true);
 			}
 		}
-
 	}
 }

@@ -7,6 +7,7 @@ public class WeaponManager : MonoBehaviour
 	public enum WeaponType { Orbit, Fire }
 	public WeaponType type;
 
+	public ItemData data;
 	public int id;
 	public int prefabId;
 	public float damage;
@@ -28,6 +29,7 @@ public class WeaponManager : MonoBehaviour
 		id = data.itemID;
 		damage = data.baseDamage;
 		count = data.baseCount;
+		this.data = data;
 
 		for (int i = 0; i < GameManager.instance.pool.prefabs.Length; i++)
 		{

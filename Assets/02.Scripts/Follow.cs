@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Follow : MonoBehaviour
 {
-    RectTransform rectTransform;
+    RectTransform rectTransform;	//	UI 위치, 크기
 	void Awake()
     {
         rectTransform = GetComponent<RectTransform>();

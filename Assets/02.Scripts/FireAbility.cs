@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class FireAbility : IWeaponAbility
@@ -8,7 +10,7 @@ public class FireAbility : IWeaponAbility
 	public void Initialize(WeaponManager manager)
 	{
 		_manager = manager;
-		_manager.speed = 0.3f;
+		_manager.speed = manager.data.baseSpeed;
 	}
 
 	public void Execute()
@@ -28,8 +30,10 @@ public class FireAbility : IWeaponAbility
 
 	private void Fire()
 	{
-		if (!_manager.player.scanner.nearestTarget) return;
+		if (!_manager.player.scanner.nearestTarget) 
+			return;
 
+		// 가장 가까운 적의 위치를 파악하여 방향 계산
 		Vector3 targetPos = _manager.player.scanner.nearestTarget.position;
 		Vector3 dir = (targetPos - _manager.transform.position).normalized;
 

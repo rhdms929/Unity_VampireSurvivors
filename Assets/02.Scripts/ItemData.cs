@@ -19,6 +19,7 @@ public class ItemData : ScriptableObject
 	public ItemType itemType;
 	public int itemID;
 	public string itemName;
+
 	[TextArea]
 	public string itemDesc;
 	public Sprite itemIcon;
@@ -26,6 +27,7 @@ public class ItemData : ScriptableObject
 	[Header("Level Data")]
 	public float baseDamage;
 	public int baseCount;
+	public float baseSpeed;
 	public float[] growthDamage;
 	public int[] growthCount;
 

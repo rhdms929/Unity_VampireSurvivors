@@ -7,14 +7,12 @@ public class Gear : MonoBehaviour
 	public ItemData.ItemType type;
 	public float rate;
 
-	public void init(ItemData data)
+	public void Init(ItemData data)
 	{
-		// Basic Set
 		name = "Gear_" + data.itemID;
 		transform.parent = GameManager.instance.player.transform;
 		transform.localPosition= Vector3.zero;
 
-		// Property Set
 		type = data.itemType;
 		rate = data.growthDamage[0];
 		ApplyGear();
@@ -45,22 +43,15 @@ public class Gear : MonoBehaviour
 
 		foreach (WeaponManager weapon in weapons)
 		{
-			switch (weapon.id)
-			{
-				case 0:
-					weapon.speed = 150 + (150 * rate);
-					break;
-				default:
-					weapon.speed = 0.5f * (1f - rate);
-					break;
-			}
+			float baseSpd = weapon.data.baseSpeed;
+			weapon.speed = baseSpd * (1f - rate);   // 기본 간격 * (1 - 감소율)
 		}
 	}
 
 	void SpeedUp()  //	신발기능 이동속도 올리는 함수
 	{
-		float speed = 5;
-		GameManager.instance.player.moveSpeed = speed + (speed * rate);
+		float defaultSpeed = 5f;
+		GameManager.instance.player.moveSpeed = defaultSpeed * (1f + rate);
 	}
 
 }

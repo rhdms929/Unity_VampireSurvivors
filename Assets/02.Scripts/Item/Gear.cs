@@ -37,14 +37,24 @@ public class Gear : MonoBehaviour
 	}
 
 
-	void RateUp()   // 장갑기능 연사력 올리는 함수
+	void RateUp()
 	{
 		WeaponManager[] weapons = transform.parent.GetComponentsInChildren<WeaponManager>();
 
 		foreach (WeaponManager weapon in weapons)
 		{
-			float baseSpd = weapon.data.baseSpeed;
-			weapon.speed = baseSpd * (1f - rate);   // 기본 간격 * (1 - 감소율)
+			if (weapon.id == 0) // 근접 무기(회전)
+			{
+				// 속도가 절대 0 이하로 내려가지 않도록 Mathf.Max를 사용
+				float calculatedSpeed = 150f + (150f * rate);
+				weapon.speed = Mathf.Max(calculatedSpeed, 50f);
+			}
+			else // 원거리 무기
+			{
+				// 발사 간격은 너무 작아지면 무한 발사가 되므로 최소값 제한
+				float calculatedInterval = 0.5f * (1f - rate);
+				weapon.speed = Mathf.Max(calculatedInterval, 0.1f);
+			}
 		}
 	}
 

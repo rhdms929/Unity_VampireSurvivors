@@ -144,6 +144,13 @@ public class Enemy : MonoBehaviour
 
 	void Dead()
 	{
+		// 50% 확률로만 보석 생성
+		if (Random.Range(0f, 1f) > 0.5f)
+		{
+			GameObject gem = GameManager.instance.pool.Get(4);
+			gem.transform.position = transform.position;
+		}
+
 		gameObject.SetActive(false);
 	}
 }

@@ -33,7 +33,9 @@ public class ItemUpgrade : MonoBehaviour
 	{
 		textLevel.text = "Lv. " + (level + 1);
 
-		bool isWeapon = (data.itemType == ItemData.ItemType.Melee || data.itemType == ItemData.ItemType.Ranged);
+		bool isWeapon = (data.itemType == ItemData.ItemType.Melee ||
+							data.itemType == ItemData.ItemType.Ranged ||
+							data.itemType == ItemData.ItemType.Boomerang);
 
 		if (isWeapon)
 		{
@@ -56,6 +58,7 @@ public class ItemUpgrade : MonoBehaviour
 		{
 			case ItemData.ItemType.Melee:
 			case ItemData.ItemType.Ranged:
+			case ItemData.ItemType.Boomerang:
 				HandleWeaponUpgrade(player); // 무기 로직 실행
 				break;
 			case ItemData.ItemType.Glove:

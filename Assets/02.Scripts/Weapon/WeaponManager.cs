@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WeaponManager : MonoBehaviour
 {
-	public enum WeaponType { Orbit, Fire }
+	public enum WeaponType { Orbit, Fire , Boomerang }
 	public WeaponType type;
 
 	public ItemData data;
@@ -42,11 +42,16 @@ public class WeaponManager : MonoBehaviour
 
 		if (data.itemType == ItemData.ItemType.Melee) type = WeaponType.Orbit;
 		else if (data.itemType == ItemData.ItemType.Ranged) type = WeaponType.Fire;
+		else if (data.itemType == ItemData.ItemType.Boomerang) type = WeaponType.Boomerang;
 
 		switch (type)
 		{
-			case WeaponType.Orbit: _ability = new Orbit(); break;
-			case WeaponType.Fire: _ability = new FireAbility(); break;
+			case WeaponType.Orbit: _ability = new Orbit(); 
+				break;
+			case WeaponType.Fire: _ability = new FireAbility(); 
+				break;
+			case WeaponType.Boomerang: _ability = new BoomerangAbility(); 
+				break;
 		}
 
 		_ability.Initialize(this);

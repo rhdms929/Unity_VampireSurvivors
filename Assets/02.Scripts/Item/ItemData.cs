@@ -12,7 +12,8 @@ public class ItemData : ScriptableObject
 		Ranged,
 		Glove,
 		Shoes,
-		Health
+		Health,
+		Boomerang
 	}
 
 	[Header("Main Item Info")]

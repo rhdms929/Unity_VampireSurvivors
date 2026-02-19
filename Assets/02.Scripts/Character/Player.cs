@@ -8,15 +8,24 @@ public class Player : MonoBehaviour
 	public float moveSpeed = 5f;
 	public Scanner scanner;
 	public bool isDead;
+	public RuntimeAnimatorController[] animCon;
 
 	Rigidbody2D rb;
+	SpriteRenderer spriter;
 	Animator anim;
 
 	void Awake()
 	{
 		rb = GetComponent<Rigidbody2D>();
-		anim = GetComponentInChildren<Animator>();
+		anim = GetComponent<Animator>();
+		spriter = GetComponent<SpriteRenderer>();
 		scanner = GetComponent<Scanner>();
+	}
+
+	void OnEnable()
+	{
+		moveSpeed *= Character.Speed;
+		anim.runtimeAnimatorController = animCon[GameManager.instance.playerId % 2];
 	}
 
 	void Update()
@@ -31,13 +40,12 @@ public class Player : MonoBehaviour
 		// 애니메이터
 		if (anim != null)
 		{
-			anim.SetBool("1_Move", inputVec.magnitude > 0);
+			anim.SetFloat("Speed", inputVec.magnitude);
 		}
-		//	방향
-		if (moveX != 0)
+		if(moveX != 0)
 		{
-			anim.transform.localScale = new Vector3(moveX > 0 ? -1 : 1, 1, 1);
-		}
+			spriter.flipX = moveX < 0;
+		} 
 	}
 
 	void FixedUpdate()
@@ -69,7 +77,7 @@ public class Player : MonoBehaviour
 			transform.GetChild(i).gameObject.SetActive(false);
 		}
 
-		anim.SetTrigger("4_Death");
+		anim.SetTrigger("Dead");
 		GameManager.instance.GameOver();
 	}
 }

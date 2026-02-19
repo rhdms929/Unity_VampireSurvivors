@@ -43,24 +43,30 @@ public class Gear : MonoBehaviour
 
 		foreach (WeaponManager weapon in weapons)
 		{
-			if (weapon.id == 0) // 근접 무기(회전)
+			// 무기 아이디나 타입을 기준으로 분기 처리
+			switch (weapon.type)
 			{
-				// 속도가 절대 0 이하로 내려가지 않도록 Mathf.Max를 사용
-				float calculatedSpeed = 150f + (150f * rate);
-				weapon.speed = Mathf.Max(calculatedSpeed, 50f);
-			}
-			else // 원거리 무기
-			{
-				// 발사 간격은 너무 작아지면 무한 발사가 되므로 최소값 제한
-				float calculatedInterval = 0.5f * (1f - rate);
-				weapon.speed = Mathf.Max(calculatedInterval, 0.1f);
+				case WeaponManager.WeaponType.Orbit: // 근접 무기
+					float baseOrbitSpeed = 150f * Character.WeaponSpeed;
+					weapon.speed = baseOrbitSpeed * (1f + rate);
+					break;
+
+				case WeaponManager.WeaponType.Fire: // 원거리 무기
+					float baseFireRate = 0.5f * Character.WeaponRate;
+					weapon.speed = Mathf.Max(baseFireRate * (1f - rate), 0.1f);
+					break;
+
+				case WeaponManager.WeaponType.Boomerang: // 부메랑
+					float baseBoomerangRate = 0.8f * Character.WeaponRate;
+					weapon.speed = Mathf.Max(baseBoomerangRate * (1f - rate), 0.2f);
+					break;
 			}
 		}
 	}
 
 	void SpeedUp()  //	신발기능 이동속도 올리는 함수
 	{
-		float defaultSpeed = 5f;
+		float defaultSpeed = 3* Character.Speed; // 기본 이동 속도
 		GameManager.instance.player.moveSpeed = defaultSpeed * (1f + rate);
 	}
 

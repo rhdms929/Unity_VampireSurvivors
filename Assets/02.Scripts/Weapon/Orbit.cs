@@ -7,7 +7,7 @@ public class Orbit : IWeaponAbility
 	public void Initialize(WeaponManager manager)
 	{
 		_manager = manager;
-		_manager.speed = 150f;
+		_manager.speed = 150f* Character.WeaponSpeed;
 		Batch();
 	}
 

@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BoomerangAbility : IWeaponAbility
@@ -12,11 +14,12 @@ public class BoomerangAbility : IWeaponAbility
 
 	public void Execute()
 	{
+
 		if (weaponManager == null) return;
 
 		timer += Time.deltaTime;
 
-		if (timer > 1.2f)
+		if (timer > weaponManager.speed)
 		{
 			timer = 0;
 

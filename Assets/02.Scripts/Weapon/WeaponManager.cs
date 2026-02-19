@@ -27,8 +27,8 @@ public class WeaponManager : MonoBehaviour
 		if (player == null) player = GetComponentInParent<Player>();
 
 		id = data.itemID;
-		damage = data.baseDamage;
-		count = data.baseCount;
+		damage = data.baseDamage * Character.Damage;
+		count = data.baseCount + Character.Count;
 		this.data = data;
 
 		for (int i = 0; i < GameManager.instance.pool.prefabs.Length; i++)
@@ -72,7 +72,7 @@ public class WeaponManager : MonoBehaviour
 
 	public void LevelUp(float damage, int count)
 	{
-		this.damage = damage;
+		this.damage = damage * Character.Damage;
 		this.count += count;
 		_ability.OnLevelUp();
 

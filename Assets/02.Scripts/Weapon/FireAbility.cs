@@ -10,7 +10,7 @@ public class FireAbility : IWeaponAbility
 	public void Initialize(WeaponManager manager)
 	{
 		_manager = manager;
-		_manager.speed = manager.data.baseSpeed;
+		_manager.speed = 0.5f* Character.WeaponRate;
 	}
 
 	public void Execute()

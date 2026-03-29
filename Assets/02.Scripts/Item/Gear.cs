@@ -58,7 +58,7 @@ public class Gear : MonoBehaviour
 
 				case WeaponManager.WeaponType.Boomerang: // ºÎ¸Þ¶û
 					float baseBoomerangRate = 0.8f * Character.WeaponRate;
-					weapon.speed = Mathf.Max(baseBoomerangRate * (1f - rate), 0.2f);
+					weapon.speed = Mathf.Max(baseBoomerangRate * (1f - rate), 0.1f);
 					break;
 			}
 		}

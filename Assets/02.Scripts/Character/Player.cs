@@ -25,7 +25,7 @@ public class Player : MonoBehaviour
 	void OnEnable()
 	{
 		moveSpeed *= Character.Speed;
-		anim.runtimeAnimatorController = animCon[GameManager.instance.playerId % 2];
+		anim.runtimeAnimatorController = animCon[GameManager.instance.playerId];
 	}
 
 	void Update()

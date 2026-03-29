@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.U2D.Animation;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,6 +11,7 @@ public class GameManager : MonoBehaviour
 	public bool isLive;
 	public float gameTime;
 	public float maxGameTime = 2 * 10f; //20초
+
 	[Header("# Player Stats")]
 	public int playerId;
 	public float health;
@@ -17,13 +19,17 @@ public class GameManager : MonoBehaviour
 	public int level;
 	public int kill;
 	public int exp;
-	public int[] nextExp = { 10, 30, 70, 150, 300, 600, 1000, 1500, 2100, 3000 };
+	public int[] nextExp = { 3, 5, 10, 100, 150, 210, 280, 360, 450, 600 };
+
 	[Header("# Game Object")]
 	public PoolManager pool;
 	public Player player;
 	public LevelUp LevelUpUI;
 	public Result gameOverUI;
 	public GameObject enemyCleaner;
+
+	[Header("# Character Data")]
+	public ItemData[] characterDatas; // 인스펙터에서 데이터 파일을 넣을 칸
 
 	void Awake()
 	{
@@ -43,9 +49,22 @@ public class GameManager : MonoBehaviour
 		health = maxHealth;
 
 		player.gameObject.SetActive(true);
-		LevelUpUI.Select(playerId % 2);
+
+		//	튜버만 5번
+		if (playerId == 2) 
+		{
+			LevelUpUI.Select(5); 
+		}
+		else
+		{
+			LevelUpUI.Select(playerId); 
+		}
+
 		isLive = true;
 		ReStart();
+
+		AudioManager.instance.PlayBgm(true);
+		AudioManager.instance.PlaySfx(AudioManager.SFX.Select);
 	}
 
 	public void GameOver()
@@ -62,6 +81,9 @@ public class GameManager : MonoBehaviour
 		gameOverUI.gameObject.SetActive(true);
 		gameOverUI.Lose();
 		Stop();
+
+		AudioManager.instance.PlayBgm(false);
+		AudioManager.instance.PlaySfx(AudioManager.SFX.Lose);
 	}
 
 	public void GameVictory()
@@ -79,11 +101,19 @@ public class GameManager : MonoBehaviour
 		gameOverUI.gameObject.SetActive(true);
 		gameOverUI.Win();
 		Stop();
+
+		AudioManager.instance.PlayBgm(false);
+		AudioManager.instance.PlaySfx(AudioManager.SFX.Win);
 	}
 
 	public void GameRestart()
 	{
 		SceneManager.LoadScene(0);
+	}
+
+	public void GameQuit()
+	{
+		Application.Quit();
 	}
 
 	void Update()

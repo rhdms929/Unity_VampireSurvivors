@@ -44,8 +44,7 @@ public class Orbit : IWeaponAbility
 			weapon.Rotate(rotVec);
 			weapon.Translate(weapon.up * 1.5f, Space.World);
 
-			// 근접 공격용 초기화 (-1)
-			weapon.GetComponent<Weapon>().Init(_manager.damage, -1, Vector3.zero);
+			weapon.GetComponent<Weapon>().Init(_manager.damage, -100, Vector3.zero);
 		}
 	}
 }

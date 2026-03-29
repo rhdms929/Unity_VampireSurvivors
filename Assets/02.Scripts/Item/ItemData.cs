@@ -34,4 +34,7 @@ public class ItemData : ScriptableObject
 
 	[Header("Weapon Info")]
 	public GameObject projectile;
+
+	[Header("Character Selection Settings")]
+	public int startWeaponId;
 }

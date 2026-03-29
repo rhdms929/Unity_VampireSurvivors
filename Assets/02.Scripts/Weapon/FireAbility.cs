@@ -41,5 +41,7 @@ public class FireAbility : IWeaponAbility
 		bullet.position = _manager.transform.position;
 		bullet.rotation = Quaternion.FromToRotation(Vector3.up, dir);
 		bullet.GetComponent<Weapon>().Init(_manager.damage, _manager.count, dir);
+
+		AudioManager.instance.PlaySfx(AudioManager.SFX.Range);
 	}
 }

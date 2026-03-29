@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Reposition : MonoBehaviour
@@ -17,31 +19,33 @@ public class Reposition : MonoBehaviour
 		Vector3 playerPos = GameManager.instance.player.transform.position;
 		Vector3 myPos = transform.position;
 
-		float diffX = playerPos.x - myPos.x;
-		float diffY = playerPos.y - myPos.y;
-
-		Vector3 playerDir = GameManager.instance.player.inputVec; 
-
-		float absDiffX = Mathf.Abs(diffX);
-		float absDiffY = Mathf.Abs(diffY);
 
 		switch (transform.tag)
 		{
 			case "Ground":
-				if (absDiffX > absDiffY)
+				float diffX = playerPos.x - myPos.x;
+				float diffY = playerPos.y - myPos.y;
+				float dirx = diffX < 0 ? -1 : 1;
+				float diry = diffY < 0 ? -1 : 1;
+				diffX = Mathf.Abs(diffX);
+				diffY = Mathf.Abs(diffY);
+
+				if (diffX > diffY)
 				{
-					transform.Translate(Vector3.right * Mathf.Sign(diffX) * 40);
+					transform.Translate(Vector3.right * dirx * 40);
 				}
-				else if (absDiffX < absDiffY)
+				else if (diffX < diffY)
 				{
-					transform.Translate(Vector3.up * Mathf.Sign(diffY) * 40);
+					transform.Translate(Vector3.up * diry * 40);
 				}
 				break;
 
 			case "Enemy":
 				if (col.enabled)
 				{
-					transform.Translate(playerDir* 20 + new Vector3(Random.Range(-3f, 3f), Random.Range(-3f, 3f), 0f));
+					Vector3 dist = playerPos - myPos;
+					Vector3 ran = new Vector3(Random.Range(-3, 3), Random.Range(-3, 3), 0);
+					transform.Translate(ran + dist * 2);
 				}
 				break;
 		}

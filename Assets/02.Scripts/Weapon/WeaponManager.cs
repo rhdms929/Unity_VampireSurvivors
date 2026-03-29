@@ -48,9 +48,11 @@ public class WeaponManager : MonoBehaviour
 		{
 			case WeaponType.Orbit: _ability = new Orbit(); 
 				break;
-			case WeaponType.Fire: _ability = new FireAbility(); 
+			case WeaponType.Fire: _ability = new FireAbility();
+				speed = 0.5f;
 				break;
-			case WeaponType.Boomerang: _ability = new BoomerangAbility(); 
+			case WeaponType.Boomerang: _ability = new BoomerangAbility();
+				speed = 1.5f;
 				break;
 		}
 
@@ -64,10 +66,6 @@ public class WeaponManager : MonoBehaviour
 
 		_ability?.Execute();
 
-		if (Input.GetKeyDown(KeyCode.Space))
-		{
-			LevelUp(10, 1);
-		}
 	}
 
 	public void LevelUp(float damage, int count)

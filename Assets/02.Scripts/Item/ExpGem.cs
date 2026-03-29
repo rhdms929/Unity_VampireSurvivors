@@ -35,6 +35,8 @@ public class ExpGem : MonoBehaviour
 		{
 			GameManager.instance.AddExp();
 			gameObject.SetActive(false);  // 보석을 비활성화하여 수집된 것으로 처리
+
+			AudioManager.instance.PlaySfx(AudioManager.SFX.Exp);
 		}
 	}
 }

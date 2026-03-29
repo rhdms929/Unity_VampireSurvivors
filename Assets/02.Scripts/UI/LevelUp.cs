@@ -19,12 +19,16 @@ public class LevelUp : MonoBehaviour
 		Next();
 		rectTransform.localScale = Vector3.one;
 		GameManager.instance.Stop();
+		AudioManager.instance.PlaySfx(AudioManager.SFX.LevelUp);
+		AudioManager.instance.EffectBgm(true);
 	}
 
 	public void Hide()
 	{
 		rectTransform.localScale = Vector3.zero;
 		GameManager.instance.ReStart();
+		AudioManager.instance.PlaySfx(AudioManager.SFX.Select);
+		AudioManager.instance.EffectBgm(false);
 	}
 
 	public void Select(int index)
@@ -60,10 +64,18 @@ public class LevelUp : MonoBehaviour
 
 			ItemUpgrade randItem = items[ranList[i]];
 
-			// 만렙 아이템의 경우 소비 아이템(예: 체력 회복)으로 대체
+			// 만렙 아이템의 경우 소비 아이템)으로 대체
 			if (randItem.level >= randItem.data.growthDamage.Length)
 			{
-				items[4].gameObject.SetActive(true);
+				//  4번을 직접 켜는 게 아니라, 전체 아이템 중 Health 타입을 찾아 켭니다.
+				foreach (ItemUpgrade item in items)
+				{
+					if (item.data.itemType == ItemData.ItemType.Health)
+					{
+						item.gameObject.SetActive(true);
+						break; 
+					}
+				}
 			}
 			else
 			{

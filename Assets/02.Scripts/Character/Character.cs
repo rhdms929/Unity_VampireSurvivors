@@ -4,26 +4,16 @@ using UnityEngine;
 
 public class Character : MonoBehaviour
 {
-	public static float Speed
-	{
-		get { return GameManager.instance.playerId == 0 ? 1.1f : 1f; }
-	}
+	// 이제 playerId가 0인지 1인지 체크할 필요가 없습니다.
+	// 데이터 파일(ItemData)에 적힌 숫자를 그대로 가져오기 때문입니다.
 
-	public static float WeaponSpeed
-	{
-		get { return GameManager.instance.playerId == 1 ? 1.1f : 1f; }
-	}
-	public static float WeaponRate
-	{
-		get { return GameManager.instance.playerId == 1 ? 0.9f : 1f; }
-	}
-	public static float Damage
-	{
-		get { return GameManager.instance.playerId == 2 ? 1.2f : 1f; }
-	}
-	public static int Count
-	{
-		get { return GameManager.instance.playerId == 3 ? 1 : 0; }
-	}
+	public static float Speed => GameManager.instance.SelectedCharacterData.speedModifier;
 
+	public static float WeaponSpeed => GameManager.instance.SelectedCharacterData.weaponSpeedModifier;
+
+	public static float WeaponRate => GameManager.instance.SelectedCharacterData.weaponRateModifier;
+
+	public static float Damage => GameManager.instance.SelectedCharacterData.damageModifier;
+
+	public static int Count => GameManager.instance.SelectedCharacterData.extraCount;
 }

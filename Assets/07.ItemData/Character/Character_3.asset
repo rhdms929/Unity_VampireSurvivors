@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfa81ba575254e54b969a25003f10d13, type: 3}
+  m_Name: Character_3
+  m_EditorClassIdentifier: 
+  itemType: 0
+  itemID: 0
+  itemName: 
+  itemDesc: 
+  itemIcon: {fileID: 0}
+  baseDamage: 0
+  baseCount: 0
+  baseSpeed: 0
+  growthDamage: []
+  growthCount: 
+  projectile: {fileID: 0}
+  startWeaponId: 0
+  speedModifier: 1
+  weaponSpeedModifier: 1
+  weaponRateModifier: 1
+  damageModifier: 1
+  extraCount: 1

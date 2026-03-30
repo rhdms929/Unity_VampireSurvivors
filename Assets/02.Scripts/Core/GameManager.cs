@@ -1,19 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.U2D.Animation;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance;
+	public static GameManager instance;
 	[Header("# Game Control")]
 	public bool isLive;
 	public float gameTime;
-	public float maxGameTime = 2 * 10f; //20초
+	public float maxGameTime = 2 * 10f;
 
 	[Header("# Player Stats")]
-	public int playerId;
+	public int playerId; // 실제 게임 중인 캐릭터 ID
+	public int selectId; // 캐릭터 선택창에서 임시로 저장할 ID
 	public float health;
 	public float maxHealth = 100;
 	public int level;
@@ -27,44 +27,56 @@ public class GameManager : MonoBehaviour
 	public LevelUp LevelUpUI;
 	public Result gameOverUI;
 	public GameObject enemyCleaner;
+	public GameObject startUI; // 시작 화면 UI 그룹
 
 	[Header("# Character Data")]
-	public ItemData[] characterDatas; // 인스펙터에서 데이터 파일을 넣을 칸
+	public ItemData[] characterDatas;
+	public ItemData SelectedCharacterData => characterDatas[playerId];
 
 	void Awake()
 	{
-		if(instance == null)
-		{
-			instance = this;
-		}
-		else
-		{
-			Destroy(gameObject);
-		}
+		if (instance == null) instance = this;
+		else Destroy(gameObject);
+	}
+
+	public void SelectCharacter(int id)
+	{
+		selectId = id;
+		Debug.Log(id + "번 캐릭터 선택됨. 스타트 버튼을 누르세요");
+
+		AudioManager.instance.PlaySfx(AudioManager.SFX.Select);
+	}
+
+	public void RealStart()
+	{
+		GameStart(selectId);
+
+		if (startUI != null) startUI.SetActive(false);
 	}
 
 	public void GameStart(int id)
 	{
 		playerId = id;
 		health = maxHealth;
-
 		player.gameObject.SetActive(true);
 
-		//	튜버만 5번
-		if (playerId == 2) 
+		if (playerId == 2) // 튜버
 		{
-			LevelUpUI.Select(5); 
+			LevelUpUI.Select(5); // 부메랑
+		}
+		else if (playerId == 3) // 코니 
+		{
+			LevelUpUI.Select(0); // 첫 번째 무기
+			LevelUpUI.Select(1); // 두 번째 무기
 		}
 		else
 		{
-			LevelUpUI.Select(playerId); 
+			LevelUpUI.Select(playerId); // 나머지
 		}
 
 		isLive = true;
 		ReStart();
-
 		AudioManager.instance.PlayBgm(true);
-		AudioManager.instance.PlaySfx(AudioManager.SFX.Select);
 	}
 
 	public void GameOver()

@@ -6,12 +6,12 @@ public class Scanner : MonoBehaviour
 {
 	public float scanRange;
 	public LayerMask targetLayer;
-	public RaycastHit2D[] targets;
+	public Collider2D[] targets;
 	public Transform nearestTarget;
 
 	void FixedUpdate()
 	{
-		targets = Physics2D.CircleCastAll(transform.position, scanRange, Vector2.zero, 0f, targetLayer);
+		targets = Physics2D.OverlapCircleAll(transform.position, scanRange, targetLayer);
 		nearestTarget = GetNearestTarget();
 	}
 
@@ -19,7 +19,7 @@ public class Scanner : MonoBehaviour
 	{
 		Transform nearest = null;
 		float minDistance = float.MaxValue;
-		foreach (RaycastHit2D target in targets)
+		foreach (Collider2D target in targets)
 		{
 			float distance = Vector2.Distance(transform.position, target.transform.position);
 			if (distance < minDistance)

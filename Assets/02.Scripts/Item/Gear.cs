@@ -20,11 +20,11 @@ public class Gear : MonoBehaviour
 
 	public void LevelUp(float nextRate)
 	{
-		this.rate = nextRate;
+		rate = nextRate;
 		ApplyGear();
 	}
 
-	void ApplyGear()    // 타입에 따라 적절하게 로직 적용하는 함수
+	public void ApplyGear()    // 타입에 따라 적절하게 로직 적용하는 함수
 	{
 		switch (type) {
 			case ItemData.ItemType.Glove:
@@ -66,8 +66,8 @@ public class Gear : MonoBehaviour
 
 	void SpeedUp()  //	신발기능 이동속도 올리는 함수
 	{
-		float defaultSpeed = 3* Character.Speed; // 기본 이동 속도
-		GameManager.instance.player.moveSpeed = defaultSpeed * (1f + rate);
+		Player player = GameManager.instance.player;
+		player.moveSpeed = player.baseMoveSpeed * Character.Speed * (1f + rate);
 	}
 
 }

@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
 	public static GameManager instance;
+
 	[Header("# Game Control")]
 	public bool isLive;
 	public float gameTime;
@@ -20,6 +21,7 @@ public class GameManager : MonoBehaviour
 	public int kill;
 	public int exp;
 	public int[] nextExp = { 3, 5, 10, 100, 150, 210, 280, 360, 450, 600 };
+	public int MaxLevel => nextExp.Length;
 
 	[Header("# Game Object")]
 	public PoolManager pool;
@@ -28,6 +30,7 @@ public class GameManager : MonoBehaviour
 	public Result gameOverUI;
 	public GameObject enemyCleaner;
 	public GameObject startUI; // 시작 화면 UI 그룹
+	public AchieveManager achieveManager;
 
 	[Header("# Character Data")]
 	public ItemData[] characterDatas;
@@ -35,7 +38,11 @@ public class GameManager : MonoBehaviour
 
 	void Awake()
 	{
-		if (instance == null) instance = this;
+		if (instance == null)
+		{
+			instance = this;
+			DontDestroyOnLoad(gameObject);
+		}
 		else Destroy(gameObject);
 	}
 
@@ -43,14 +50,12 @@ public class GameManager : MonoBehaviour
 	{
 		selectId = id;
 		Debug.Log(id + "번 캐릭터 선택됨. 스타트 버튼을 누르세요");
-
 		AudioManager.instance.PlaySfx(AudioManager.SFX.Select);
 	}
 
 	public void RealStart()
 	{
 		GameStart(selectId);
-
 		if (startUI != null) startUI.SetActive(false);
 	}
 
@@ -60,18 +65,10 @@ public class GameManager : MonoBehaviour
 		health = maxHealth;
 		player.gameObject.SetActive(true);
 
-		if (playerId == 2) // 튜버
+		// startWeaponIds 배열 기반으로 시작 무기 지급
+		foreach (int weaponId in SelectedCharacterData.startWeaponIds)
 		{
-			LevelUpUI.Select(5); // 부메랑
-		}
-		else if (playerId == 3) // 코니 
-		{
-			LevelUpUI.Select(0); // 첫 번째 무기
-			LevelUpUI.Select(1); // 두 번째 무기
-		}
-		else
-		{
-			LevelUpUI.Select(playerId); // 나머지
+			LevelUpUI.Select(weaponId);
 		}
 
 		isLive = true;
@@ -81,43 +78,33 @@ public class GameManager : MonoBehaviour
 
 	public void GameOver()
 	{
-		StartCoroutine(GameOverRoutine());
-	}
-
-	IEnumerator GameOverRoutine()
-	{
-		isLive = false;
-
-		yield return new WaitForSeconds(0.5f);
-
-		gameOverUI.gameObject.SetActive(true);
-		gameOverUI.Lose();
-		Stop();
-
-		AudioManager.instance.PlayBgm(false);
-		AudioManager.instance.PlaySfx(AudioManager.SFX.Lose);
+		StartCoroutine(GameEndRoutine(false));
 	}
 
 	public void GameVictory()
 	{
-		StartCoroutine(GameVictoryRoutine());
+		StartCoroutine(GameEndRoutine(true));
 	}
 
-	IEnumerator GameVictoryRoutine()
+	IEnumerator GameEndRoutine(bool isWin)
 	{
 		isLive = false;
-		enemyCleaner.SetActive(false);
+		achieveManager.CheckAllAchieves();
+
+		if (isWin)
+			enemyCleaner.SetActive(false);
 
 		yield return new WaitForSeconds(0.5f);
 
 		gameOverUI.gameObject.SetActive(true);
-		gameOverUI.Win();
+
+		if (isWin) gameOverUI.Win();
+		else gameOverUI.Lose();
+
 		Stop();
-
 		AudioManager.instance.PlayBgm(false);
-		AudioManager.instance.PlaySfx(AudioManager.SFX.Win);
+		AudioManager.instance.PlaySfx(isWin ? AudioManager.SFX.Win : AudioManager.SFX.Lose);
 	}
-
 	public void GameRestart()
 	{
 		SceneManager.LoadScene(0);
@@ -130,8 +117,8 @@ public class GameManager : MonoBehaviour
 
 	void Update()
 	{
-		if(!isLive)
-			return;
+		if (!isLive) return;
+
 		gameTime += Time.deltaTime;
 
 		if (gameTime > maxGameTime)
@@ -140,14 +127,20 @@ public class GameManager : MonoBehaviour
 			GameVictory();
 		}
 	}
+	public void AddKill()
+	{
+		kill++;
+		achieveManager.CheckAllAchieves(); // 킬 업적 체크
+	}
 
 	public void AddExp()
 	{
-		if(!isLive)
-			return;
+		if (!isLive) return;
+
 		exp++;
 
-		if (exp == nextExp[Mathf.Min(level, nextExp.Length-1)])
+		int currentLevelExp = nextExp[Mathf.Min(level, MaxLevel - 1)];
+		if (exp >= currentLevelExp)
 		{
 			level++;
 			exp = 0;

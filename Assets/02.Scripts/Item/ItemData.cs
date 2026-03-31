@@ -37,7 +37,7 @@ public class ItemData : ScriptableObject
 	public GameObject projectile;
 
 	[Header("Character Selection Settings")]
-	public int startWeaponId;
+	public int[] startWeaponIds;
 
 	[Header("Character Stat Modifiers")]
 	public float speedModifier = 1f;       // 기본 1배 (1.1f면 10% 증가)

@@ -74,14 +74,14 @@ public class ItemUpgrade : MonoBehaviour
 		level++;
 		UpdateUI(); // 레벨업 후 즉시 UI 갱신
 
-		// 장비 효과를 모든 무기에 전파
-		player.BroadcastMessage("ApplyGear", SendMessageOptions.DontRequireReceiver);
+		Gear[] gears = player.GetComponentsInChildren<Gear>();
+		foreach (Gear g in gears)
+			g.ApplyGear();
 
-		// 최대 레벨에 도달하면 더 이상 선택할 수 없게 버튼 비활성화
-		if (level >= data.growthDamage.Length)
-		{
+		// 배열 길이 기반으로 최대 레벨 체크
+		int maxLevel = Mathf.Min(data.growthDamage.Length, data.growthCount.Length);
+		if (level >= maxLevel)
 			GetComponent<Button>().interactable = false;
-		}
 	}
 
 	void HandleWeaponUpgrade(Player player)

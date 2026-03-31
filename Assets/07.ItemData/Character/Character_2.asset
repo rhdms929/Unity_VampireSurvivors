@@ -12,18 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfa81ba575254e54b969a25003f10d13, type: 3}
   m_Name: Character_2
   m_EditorClassIdentifier: 
-  itemType: 0
-  itemID: 0
-  itemName: 
+  itemType: 6
+  itemID: 2
+  itemName: Tuber
   itemDesc: 
-  itemIcon: {fileID: 0}
+  itemIcon: {fileID: 1876572452, guid: 8f7a60065e3984c489b9c4d41bc3dc4e, type: 3}
   baseDamage: 0
   baseCount: 0
   baseSpeed: 0
   growthDamage: []
   growthCount: 
   projectile: {fileID: 0}
-  startWeaponId: 0
+  startWeaponIds: 05000000
   speedModifier: 1
   weaponSpeedModifier: 1
   weaponRateModifier: 1

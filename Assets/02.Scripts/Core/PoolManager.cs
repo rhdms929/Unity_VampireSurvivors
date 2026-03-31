@@ -8,45 +8,60 @@ public class PoolManager : MonoBehaviour
 	public GameObject[] prefabs;
 
 	//	풀 담당을 하는 리스트들
-	List<GameObject>[] pools;
+	Queue<GameObject>[] pools;
+
+	// 프리팹 인덱스 역매핑 (오브젝트 -> 인덱스)
+	Dictionary<GameObject, int> prefabIndexMap;
 
 	void Awake()
 	{
 		//	풀 리스트들 초기화
-		pools = new List<GameObject>[prefabs.Length];
+		pools = new Queue<GameObject>[prefabs.Length];
 
 		for (int i = 0; i < pools.Length; i++)
 		{
-			pools[i] = new List<GameObject>();
+			pools[i] = new Queue<GameObject>();
+			prefabIndexMap = new Dictionary<GameObject, int>();
 		}
 	}
 
 	public GameObject Get(int prefabIndex)
 	{
-		GameObject select = null;
+		GameObject select;
 
-		// 선택한 풀의 놀고 있는 게임오브젝트 접근
-
-		foreach (GameObject item in pools[prefabIndex])
+		// 풀에 여유 오브젝트가 있으면 꺼내서 활성화
+		if (pools[prefabIndex].Count > 0)
 		{
-			if (!item.activeSelf)
-			{
-				//	발견하면 select에 할당 후 활성화
-				select = item;
-				select.SetActive(true);     // 비활성화 오브젝트를 찾으면 SetActive(true)로 활성화
-				break;
-			}
+			select = pools[prefabIndex].Dequeue();
+			select.SetActive(true);
 		}
-
-		//	못 찾았으면? 새롭게 생성하고 select에 할당
-		if(!select)
+		else
 		{
+			// 없으면 새로 생성 후 반환
 			select = Instantiate(prefabs[prefabIndex], transform);
-			pools[prefabIndex].Add(select);
 		}
 
 		return select;
 
+	} 
+	// 오브젝트를 풀에 반환
+	public void Return(GameObject obj, int prefabIndex)
+	{
+		obj.SetActive(false);
+		pools[prefabIndex].Enqueue(obj);
+	}
+
+	// 프리팹 레퍼런스로도 반환 가능 (편의 오버로드)
+	public void Return(GameObject obj, GameObject prefab)
+	{
+		if (prefabIndexMap.TryGetValue(prefab, out int index))
+		{
+			Return(obj, index);
+		}
+		else
+		{
+			Debug.LogWarning($"[PoolManager] 등록되지 않은 프리팹입니다: {prefab.name}");
+		}
 	}
 
 }

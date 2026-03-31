@@ -12,18 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfa81ba575254e54b969a25003f10d13, type: 3}
   m_Name: Character_1
   m_EditorClassIdentifier: 
-  itemType: 0
-  itemID: 0
-  itemName: 
+  itemType: 6
+  itemID: 1
+  itemName: Barley
   itemDesc: 
-  itemIcon: {fileID: 0}
+  itemIcon: {fileID: -1592204662, guid: 0c187a32c5bde4747be8d00770b07403, type: 3}
   baseDamage: 0
   baseCount: 0
   baseSpeed: 0
   growthDamage: []
   growthCount: 
   projectile: {fileID: 0}
-  startWeaponId: 0
+  startWeaponIds: 01000000
   speedModifier: 1
   weaponSpeedModifier: 1.1
   weaponRateModifier: 0.9

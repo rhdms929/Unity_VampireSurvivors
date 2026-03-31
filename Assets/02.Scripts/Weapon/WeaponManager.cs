@@ -5,16 +5,16 @@ using UnityEngine;
 public class WeaponManager : MonoBehaviour
 {
 	public enum WeaponType { Orbit, Fire , Boomerang }
-	public WeaponType type;
 
+	public WeaponType type;
 	public ItemData data;
 	public int id;
 	public int prefabId;
 	public float damage;
 	public int count;
 	public float speed;
-
 	public Player player { get; private set; }
+
 	private IWeaponAbility _ability;
 
 	void Awake()
@@ -46,14 +46,9 @@ public class WeaponManager : MonoBehaviour
 
 		switch (type)
 		{
-			case WeaponType.Orbit: _ability = new Orbit(); 
-				break;
-			case WeaponType.Fire: _ability = new FireAbility();
-				speed = 0.5f;
-				break;
-			case WeaponType.Boomerang: _ability = new BoomerangAbility();
-				speed = 1.5f;
-				break;
+			case WeaponType.Orbit: _ability = new Orbit(); break;
+			case WeaponType.Fire: _ability = new FireAbility(); break;
+			case WeaponType.Boomerang: _ability = new BoomerangAbility(); break;
 		}
 
 		_ability.Initialize(this);
@@ -74,6 +69,8 @@ public class WeaponManager : MonoBehaviour
 		this.count += count;
 		_ability.OnLevelUp();
 
-		player.BroadcastMessage("ApplyGear", SendMessageOptions.DontRequireReceiver);
+		Gear[] gears = player.GetComponentsInChildren<Gear>();
+		foreach (Gear g in gears)
+			g.ApplyGear();
 	}
 }

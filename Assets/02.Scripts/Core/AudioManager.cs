@@ -27,7 +27,17 @@ public class AudioManager : MonoBehaviour
 
 	void Awake()
 	{
-		instance = this;
+		if (instance == null)
+		{
+			instance = this;
+			DontDestroyOnLoad(gameObject); // 씬 전환 시 유지
+		}
+		else
+		{
+			Destroy(gameObject);
+			return;
+		}
+
 		Init();
 	}
 

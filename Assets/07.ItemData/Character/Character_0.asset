@@ -12,18 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfa81ba575254e54b969a25003f10d13, type: 3}
   m_Name: Character_0
   m_EditorClassIdentifier: 
-  itemType: 0
+  itemType: 6
   itemID: 0
-  itemName: 
+  itemName: Paddy
   itemDesc: 
-  itemIcon: {fileID: 0}
+  itemIcon: {fileID: 1198279449, guid: 99a24620d31e5ce4e823c32d11e17c2c, type: 3}
   baseDamage: 0
   baseCount: 0
   baseSpeed: 0
   growthDamage: []
   growthCount: 
   projectile: {fileID: 0}
-  startWeaponId: 0
+  startWeaponIds: 00000000
   speedModifier: 1.1
   weaponSpeedModifier: 1
   weaponRateModifier: 1

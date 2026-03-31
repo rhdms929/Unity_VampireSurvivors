@@ -52,12 +52,10 @@ public class AchieveManager : MonoBehaviour
 		}
 	}
 
-	void LateUpdate()
+	public void CheckAllAchieves()
 	{
 		foreach (Achieve achieve in achieves)
-		{
 			CheckAchieve(achieve);
-		}
 	}
 
 	void CheckAchieve(Achieve achieve)

@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static Cinemachine.DocumentationSortingAttribute;
 
 public class HUD : MonoBehaviour
 {
@@ -27,33 +26,30 @@ public class HUD : MonoBehaviour
 
 	void LateUpdate()
 	{
-		switch(infoType)
+		// GameManager Ä³½Ì
+		GameManager gm = GameManager.instance;
+
+		switch (infoType)
 		{
 			case InfoType.Exp:
-				float curExp = GameManager.instance.exp;
-				float maxExp = GameManager.instance.nextExp[Mathf.Min(GameManager.instance.level,GameManager.instance.nextExp.Length - 1)];
+				float curExp = gm.exp;
+				float maxExp = gm.nextExp[Mathf.Min(gm.level, gm.nextExp.Length - 1)];
 				mySlider.value = curExp / maxExp;
 				break;
-
 			case InfoType.Level:
-				myText.text = string.Format("Lv.{0:D2}", GameManager.instance.level);
+				myText.text = string.Format("Lv.{0:D2}", gm.level);
 				break;
-
 			case InfoType.Kill:
-				myText.text = string.Format("{0:F0}", GameManager.instance.kill);
+				myText.text = string.Format("{0:F0}", gm.kill);
 				break;
-
 			case InfoType.Time:
-				float remainTime = GameManager.instance.maxGameTime - GameManager.instance.gameTime;
-				int minutes = Mathf.FloorToInt(remainTime / 60F);
+				float remainTime = gm.maxGameTime - gm.gameTime;
+				int minutes = Mathf.FloorToInt(remainTime / 60f);
 				int seconds = Mathf.FloorToInt(remainTime % 60);
 				myText.text = string.Format("{0:D2}:{1:D2}", minutes, seconds);
 				break;
-
 			case InfoType.Health:
-				float curHealth = GameManager.instance.health;
-				float maxHealth = GameManager.instance.maxHealth;
-				mySlider.value = curHealth / maxHealth;
+				mySlider.value = gm.health / gm.maxHealth;
 				break;
 		}
 	}

@@ -7,10 +7,12 @@ public class FireAbility : IWeaponAbility
 	private WeaponManager _manager;
 	private float _timer;
 
+	const float BaseFireRate = 0.5f;
+
 	public void Initialize(WeaponManager manager)
 	{
 		_manager = manager;
-		_manager.speed = 0.5f* Character.WeaponRate;
+		_manager.speed = BaseFireRate * Character.WeaponRate;
 	}
 
 	public void Execute()
@@ -23,10 +25,7 @@ public class FireAbility : IWeaponAbility
 		}
 	}
 
-	public void OnLevelUp() 
-	{  
-	
-	}
+	public void OnLevelUp() {  }
 
 	private void Fire()
 	{

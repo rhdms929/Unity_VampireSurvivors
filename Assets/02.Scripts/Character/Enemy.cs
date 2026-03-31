@@ -8,15 +8,16 @@ public class Enemy : MonoBehaviour
 	public float speed;
 	public float health;
 	public float maxHealth;
+	public float dropRate = 0.5f;
 	public RuntimeAnimatorController[] animator;
 	public Rigidbody2D target;
 
 	bool isLive;
-
 	Rigidbody2D rb;
 	Collider2D col;
 	Animator anim;
 	SpriteRenderer spriter;
+	SpriteRenderer[] childrenSprites;
 	WaitForFixedUpdate wait;
 
 	void Awake()
@@ -25,6 +26,7 @@ public class Enemy : MonoBehaviour
 		col = GetComponent<Collider2D>();
 		anim = GetComponentInChildren<Animator>();
 		spriter = GetComponent<SpriteRenderer>();
+		childrenSprites = GetComponentsInChildren<SpriteRenderer>();
 		wait = new WaitForFixedUpdate();
 	}
 	void FixedUpdate()
@@ -32,7 +34,6 @@ public class Enemy : MonoBehaviour
 		// 게임이 멈췄거나 적이 죽었다면 중단
 		if (!GameManager.instance.isLive || !isLive)
 			return;
-
 		if (anim.GetCurrentAnimatorStateInfo(0).IsName("DAMAGED"))
 			return;
 
@@ -64,8 +65,7 @@ public class Enemy : MonoBehaviour
 		anim.SetBool("Dead", false);
 		health = maxHealth;
 
-		// 다시 소환될 때 투명도 초기화
-		SpriteRenderer[] childrenSprites = GetComponentsInChildren<SpriteRenderer>();
+		// 투명도 초기화 (캐싱된 배열 사용)
 		foreach (SpriteRenderer s in childrenSprites)
 		{
 			Color c = s.color;
@@ -88,8 +88,11 @@ public class Enemy : MonoBehaviour
 		if(!collision.CompareTag("Weapon") || !isLive)
 			return;
 
-		health -= collision.GetComponent<Weapon>().damage;
+		// Weapon 컴포넌트 null 체크
+		Weapon weapon = collision.GetComponent<Weapon>();
+		if (weapon == null) return;
 
+		health -= weapon.damage;
 		StartCoroutine(KnockBack());
 
 		if (health > 0)
@@ -105,9 +108,8 @@ public class Enemy : MonoBehaviour
 			rb.simulated = false;
 			spriter.sortingOrder = 1;  // 살아있는 몬스터들을 가리지않게 하기위함
 			anim.SetBool("Dead", true);
-
 			StartCoroutine(FadeOut());
-			GameManager.instance.kill++;
+			GameManager.instance.AddKill();
 			GameManager.instance.AddExp();
 
 			if (GameManager.instance.isLive)
@@ -119,9 +121,7 @@ public class Enemy : MonoBehaviour
 	{
 		yield return new WaitForSeconds(1.0f); // 죽는 애니메이션 볼 시간 확보
 
-		SpriteRenderer[] childrenSprites = GetComponentsInChildren<SpriteRenderer>();
 		float alpha = 1f;
-
 		while (alpha > 0)
 		{
 			alpha -= Time.deltaTime;
@@ -142,14 +142,13 @@ public class Enemy : MonoBehaviour
 		yield return wait;  // 물리 프레임 딜레이
 		Vector3 playerPos = GameManager.instance.player.transform.position;
 		Vector3 dirVec = transform.position - playerPos;
-
 		rb.AddForce(dirVec.normalized * 0.5f, ForceMode2D.Impulse);
 	}
 
 	void Dead()
 	{
 		// 50% 확률로만 보석 생성
-		if (Random.Range(0f, 1f) > 0.5f)
+		if (Random.Range(0f, 1f) > dropRate)
 		{
 			GameObject gem = GameManager.instance.pool.Get(4);
 			gem.transform.position = transform.position;

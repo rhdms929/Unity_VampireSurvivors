@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
 	public bool isDead;
 	public RuntimeAnimatorController[] animCon;
 
+	public float baseMoveSpeed;
 	Rigidbody2D rb;
 	SpriteRenderer spriter;
 	Animator anim;
@@ -20,11 +21,13 @@ public class Player : MonoBehaviour
 		anim = GetComponent<Animator>();
 		spriter = GetComponent<SpriteRenderer>();
 		scanner = GetComponent<Scanner>();
+		baseMoveSpeed = moveSpeed;
 	}
 
 	void OnEnable()
 	{
-		moveSpeed *= Character.Speed;
+		isDead = false;
+		moveSpeed = baseMoveSpeed * Character.Speed;
 		anim.runtimeAnimatorController = animCon[GameManager.instance.playerId];
 	}
 
@@ -70,7 +73,7 @@ public class Player : MonoBehaviour
 
 	void Die()
 	{
-		isDead = true; 
+		isDead = true;
 
 		for (int i = 2; i < transform.childCount; i++)
 		{

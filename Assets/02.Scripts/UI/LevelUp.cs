@@ -36,50 +36,60 @@ public class LevelUp : MonoBehaviour
 		items[index].OnClick();
 	}
 
-	void Next()
+	// 셔플 로직
+	List<int> GetShuffledList(int count)
+	{
+		List<int> list = new List<int>();
+		for (int i = 0; i < count; i++)
+			list.Add(i);
+
+		for (int i = 0; i < list.Count; i++)
+		{
+			int rand = Random.Range(i, list.Count);
+			int temp = list[i];
+			list[i] = list[rand];
+			list[rand] = temp;
+		}
+		return list;
+	}
+
+	// Health 아이템 찾기 분리
+	ItemUpgrade GetHealthItem()
 	{
 		foreach (ItemUpgrade item in items)
 		{
+			if (item.data.itemType == ItemData.ItemType.Health)
+				return item;
+		}
+		return null;
+	}
+
+	void Next()
+	{
+		foreach (ItemUpgrade item in items)
 			item.gameObject.SetActive(false);
-		}
 
-		List<int> ranList = new List<int>();
-		for (int i = 0; i < items.Length; i++)
+		List<int> ranList = GetShuffledList(items.Length);
+		int shown = 0;
+
+		for (int i = 0; i < ranList.Count && shown < 3; i++)
 		{
-			ranList.Add(i);
-		}
-
-		// 리스트 셔플 
-		for (int i = 0; i < ranList.Count; i++)
-		{
-			int rand = Random.Range(i, ranList.Count);
-			int temp = ranList[i];
-			ranList[i] = ranList[rand];
-			ranList[rand] = temp;
-		}
-
-		for (int i = 0; i < 3; i++)
-		{
-			if (i >= ranList.Count) break;
-
 			ItemUpgrade randItem = items[ranList[i]];
 
-			// 만렙 아이템의 경우 소비 아이템)으로 대체
 			if (randItem.level >= randItem.data.growthDamage.Length)
 			{
-				//  4번을 직접 켜는 게 아니라, 전체 아이템 중 Health 타입을 찾아 켭니다.
-				foreach (ItemUpgrade item in items)
+				// 만렙 아이템 - Health 아이템으로 대체
+				ItemUpgrade healthItem = GetHealthItem();
+				if (healthItem != null && !healthItem.gameObject.activeSelf)
 				{
-					if (item.data.itemType == ItemData.ItemType.Health)
-					{
-						item.gameObject.SetActive(true);
-						break; 
-					}
+					healthItem.gameObject.SetActive(true);
+					shown++;
 				}
 			}
 			else
 			{
 				randItem.gameObject.SetActive(true);
+				shown++;
 			}
 		}
 	}

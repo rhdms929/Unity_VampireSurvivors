@@ -1,13 +1,17 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-
 public class Orbit : IWeaponAbility
 {
 	private WeaponManager _manager;
 
+	const float BaseOrbitSpeed = 150f;  // 하드코딩 상수로 분리
+	const float OrbitRadius = 1.5f;     // 궤도 반지름 상수로 분리
+
 	public void Initialize(WeaponManager manager)
 	{
 		_manager = manager;
-		_manager.speed = 150f* Character.WeaponSpeed;
+		_manager.speed = BaseOrbitSpeed * Character.WeaponSpeed;
 		Batch();
 	}
 
@@ -28,9 +32,7 @@ public class Orbit : IWeaponAbility
 		{
 			Transform weapon;
 			if (i < _manager.transform.childCount)
-			{
 				weapon = _manager.transform.GetChild(i);
-			}
 			else
 			{
 				weapon = GameManager.instance.pool.Get(_manager.prefabId).transform;
@@ -42,9 +44,8 @@ public class Orbit : IWeaponAbility
 
 			Vector3 rotVec = Vector3.forward * 360 * i / _manager.count;
 			weapon.Rotate(rotVec);
-			weapon.Translate(weapon.up * 1.5f, Space.World);
-
-			weapon.GetComponent<Weapon>().Init(_manager.damage, -100, Vector3.zero);
+			weapon.Translate(weapon.up * OrbitRadius, Space.World);
+			weapon.GetComponent<Weapon>().Init(_manager.damage, Weapon.Orbit, Vector3.zero);
 		}
 	}
 }

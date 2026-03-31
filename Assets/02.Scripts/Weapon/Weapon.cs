@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
+	public const int Orbit = -100;      // 근접 무기 관통 플래그
+	public const int Boomerang = -1;    // 부메랑 관통 플래그
+	public const float BulletSpeed = 15f; // 발사 속도
+
 	public float damage;
 	public int penetrate;
 
@@ -21,7 +25,7 @@ public class Weapon : MonoBehaviour
 
 		if (penetrate >= 0)
 		{
-			rb.velocity = dir * 15f; // 발사 속도
+			rb.velocity = dir * BulletSpeed; // 발사 속도
 
 		}
 	}
@@ -29,7 +33,7 @@ public class Weapon : MonoBehaviour
 	// 충돌 처리	
 	void OnTriggerEnter2D(Collider2D collision)
 	{
-		if (!collision.CompareTag("Enemy") || penetrate == -100)
+		if (!collision.CompareTag("Enemy") || penetrate == -Orbit)
 			return;
 		penetrate--;
 
@@ -42,7 +46,7 @@ public class Weapon : MonoBehaviour
 
 	void OnTriggerExit2D(Collider2D collision)
 	{
-		if (!collision.CompareTag("Area") || penetrate == -100)
+		if (!collision.CompareTag("Area") || penetrate == Orbit)
 			return;
 
 		gameObject.SetActive(false);

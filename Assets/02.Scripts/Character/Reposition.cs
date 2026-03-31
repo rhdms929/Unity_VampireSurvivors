@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class Reposition : MonoBehaviour
 {
+	[SerializeField] float groundTileSize = 40f;
 	Collider2D col;
+
 	void Awake() 
 	{
 		col = GetComponent<Collider2D>();
@@ -20,34 +22,28 @@ public class Reposition : MonoBehaviour
 		Vector3 myPos = transform.position;
 
 
-		switch (transform.tag)
+		if (CompareTag("Ground"))
 		{
-			case "Ground":
-				float diffX = playerPos.x - myPos.x;
-				float diffY = playerPos.y - myPos.y;
-				float dirx = diffX < 0 ? -1 : 1;
-				float diry = diffY < 0 ? -1 : 1;
-				diffX = Mathf.Abs(diffX);
-				diffY = Mathf.Abs(diffY);
+			float diffX = playerPos.x - myPos.x;
+			float diffY = playerPos.y - myPos.y;
+			float dirX = diffX < 0 ? -1 : 1;
+			float dirY = diffY < 0 ? -1 : 1;
+			diffX = Mathf.Abs(diffX);
+			diffY = Mathf.Abs(diffY);
 
-				if (diffX > diffY)
-				{
-					transform.Translate(Vector3.right * dirx * 40);
-				}
-				else if (diffX < diffY)
-				{
-					transform.Translate(Vector3.up * diry * 40);
-				}
-				break;
-
-			case "Enemy":
-				if (col.enabled)
-				{
-					Vector3 dist = playerPos - myPos;
-					Vector3 ran = new Vector3(Random.Range(-3, 3), Random.Range(-3, 3), 0);
-					transform.Translate(ran + dist * 2);
-				}
-				break;
+			if (diffX > diffY)
+				transform.Translate(Vector3.right * dirX * groundTileSize);
+			else if (diffX < diffY)
+				transform.Translate(Vector3.up * dirY * groundTileSize);
+		}
+		else if (CompareTag("Enemy"))
+		{
+			if (col.enabled)
+			{
+				Vector3 dist = playerPos - myPos;
+				Vector3 ran = new Vector3(Random.Range(-3, 3), Random.Range(-3, 3), 0);
+				transform.Translate(ran + dist * 2);
+			}
 		}
 	}
 }

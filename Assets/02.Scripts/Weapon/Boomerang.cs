@@ -5,13 +5,18 @@ using UnityEngine;
 public class Boomerang : MonoBehaviour
 {
 	public float damage;
+
+	[Header("# Boomerang Settings")]
+	public float gravity = 25f;
+	public float initialVerticalSpeed = 12f;
+	public float relativeStartHeight = 0.5f;
+	public float deactivateYThreshold = -5f;
+
 	float speed;
 	Vector3 dir;
 	Transform player;
-
-	float gravity = 25f;
 	Vector3 verticalVelocity;
-	Vector3 relativePos; // 플레이어로부터의 상대적 위치
+	Vector3 relativePos;
 
 	public void Init(float damage, float speed, Vector3 dir, Transform player)
 	{
@@ -20,8 +25,8 @@ public class Boomerang : MonoBehaviour
 		this.dir = (dir + Vector3.up * 1.5f).normalized;
 		this.player = player;
 
-		verticalVelocity = Vector3.up * 12f;
-		relativePos = Vector3.up * 0.5f; // 시작은 플레이어 머리 위 살짝
+		verticalVelocity = Vector3.up * initialVerticalSpeed;
+		relativePos = Vector3.up * relativeStartHeight;
 	}
 
 	void Update()
@@ -39,9 +44,7 @@ public class Boomerang : MonoBehaviour
 		transform.position = player.position + relativePos;
 
 		// 4. 화면 아래로 떨어지면 회수
-		if (relativePos.y < -5f)
-		{
+		if (relativePos.y < deactivateYThreshold)
 			gameObject.SetActive(false);
-		}
 	}
 }

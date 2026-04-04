@@ -12,6 +12,7 @@ public class BoomerangAbility : IWeaponAbility
 	public void Initialize(WeaponManager manager)
 	{
 		weaponManager = manager;
+		weaponManager.speed = 1.5f;
 	}
 
 	public void Execute()

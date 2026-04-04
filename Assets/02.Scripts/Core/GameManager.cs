@@ -144,6 +144,7 @@ public class GameManager : MonoBehaviour
 		{
 			level++;
 			exp = 0;
+			achieveManager.CheckAllAchieves();
 			LevelUpUI.Show();
 		}
 	}

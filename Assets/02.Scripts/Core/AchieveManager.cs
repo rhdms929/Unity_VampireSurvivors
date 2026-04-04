@@ -65,10 +65,12 @@ public class AchieveManager : MonoBehaviour
 		switch (achieve)
 		{
 			case Achieve.unlockCharacter1:
+				// Tuber: 적 10마리 처치
 				isAchieve = GameManager.instance.kill >= 10;
 				break;
 			case Achieve.unlockCharacter2:
-				isAchieve = GameManager.instance.gameTime == GameManager.instance.maxGameTime;
+				// Corny: 레벨 5 달성 시 해금
+				isAchieve = GameManager.instance.level >= 5;
 				break;
 		}
 

@@ -30,19 +30,19 @@ public class ItemData : ScriptableObject
 	public float baseDamage;
 	public int baseCount;
 	public float baseSpeed;
-	public float[] growthDamage;
-	public int[] growthCount;
+	public float[] growthDamage;    // 레벨별 데미지 성장률
+	public int[] growthCount;       // 레벨별 투사체 개수 성장
 
 	[Header("Weapon Info")]
 	public GameObject projectile;
 
 	[Header("Character Selection Settings")]
-	public int[] startWeaponIds;
+	public int[] startWeaponIds;    // 캐릭터 시작 시 지급할 무기 ID 목록
 
 	[Header("Character Stat Modifiers")]
-	public float speedModifier = 1f;       // 기본 1배 (1.1f면 10% 증가)
-	public float weaponSpeedModifier = 1f;
-	public float weaponRateModifier = 1f;
-	public float damageModifier = 1f;      // 1.2f면 20% 증가
-	public int extraCount = 0;             // 추가 투사체 개수
+	public float speedModifier = 1f;		// 이동속도 배율
+	public float weaponSpeedModifier = 1f;	// 무기 속도 배율
+	public float weaponRateModifier = 1f;	// 발사속도 배율
+	public float damageModifier = 1f;		// 데미지 배율
+	public int extraCount = 0;				// 추가 투사체 개수
 }

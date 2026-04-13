@@ -31,6 +31,7 @@ public class WeaponManager : MonoBehaviour
 		count = data.baseCount + Character.Count;
 		this.data = data;
 
+		// 프리팹 ID 탐색
 		for (int i = 0; i < GameManager.instance.pool.prefabs.Length; i++)
 		{
 			if (data.projectile == GameManager.instance.pool.prefabs[i])
@@ -40,10 +41,12 @@ public class WeaponManager : MonoBehaviour
 			}
 		}
 
+		// 아이템 타입 -> 무기 타입 매핑
 		if (data.itemType == ItemData.ItemType.Melee) type = WeaponType.Orbit;
 		else if (data.itemType == ItemData.ItemType.Ranged) type = WeaponType.Fire;
 		else if (data.itemType == ItemData.ItemType.Boomerang) type = WeaponType.Boomerang;
 
+		// 타입에 따라 전략 동적 교체
 		switch (type)
 		{
 			case WeaponType.Orbit: _ability = new Orbit(); break;

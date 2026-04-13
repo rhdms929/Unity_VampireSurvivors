@@ -10,13 +10,13 @@ public class PoolManager : MonoBehaviour
 
 	void Awake()
 	{
-		//	풀 리스트들 초기화
 		pools = new Queue<GameObject>[prefabs.Length];
+		prefabIndexMap = new Dictionary<GameObject, int>(); 
 
 		for (int i = 0; i < pools.Length; i++)
 		{
 			pools[i] = new Queue<GameObject>();
-			prefabIndexMap = new Dictionary<GameObject, int>();
+			prefabIndexMap[prefabs[i]] = i; 
 		}
 	}
 
@@ -39,23 +39,17 @@ public class PoolManager : MonoBehaviour
 		return select;
 
 	} 
-	// 오브젝트를 풀에 반환
 	public void Return(GameObject obj, int prefabIndex)
 	{
 		obj.SetActive(false);
 		pools[prefabIndex].Enqueue(obj);
 	}
 
-	// 프리팹 레퍼런스로도 반환 가능 (편의 오버로드)
 	public void Return(GameObject obj, GameObject prefab)
 	{
 		if (prefabIndexMap.TryGetValue(prefab, out int index))
 		{
 			Return(obj, index);
-		}
-		else
-		{
-			Debug.LogWarning($"[PoolManager] 등록되지 않은 프리팹입니다: {prefab.name}");
 		}
 	}
 

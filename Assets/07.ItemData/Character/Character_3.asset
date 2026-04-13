@@ -23,7 +23,7 @@ MonoBehaviour:
   growthDamage: []
   growthCount: 
   projectile: {fileID: 0}
-  startWeaponIds: 0100000002000000
+  startWeaponIds: 0000000001000000
   speedModifier: 1
   weaponSpeedModifier: 1
   weaponRateModifier: 1
